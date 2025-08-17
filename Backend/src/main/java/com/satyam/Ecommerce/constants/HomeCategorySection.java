@@ -1,0 +1,8 @@
+package com.satyam.Ecommerce.constants;
+
+public enum HomeCategorySection {
+    ELECTRIC_CATEGORIES,
+    GRID,
+    SHOP_BY_CATEGORIES,
+    DEALS
+}
