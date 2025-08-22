@@ -22,15 +22,15 @@ import java.util.Collections;
 public class AppConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(management->management.sessionCreationPolicy(
+        http.sessionManagement(management -> management.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS
         )).authorizeHttpRequests(auth-> auth
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers("/api/products/*/reviews").permitAll()
                 .anyRequest().permitAll()
         ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf->csrf.disable())
-                .cors(cors->cors.configurationSource(coursConfigrationSource()))
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(coursConfigrationSource()))
         ;
         return http.build();
     }
@@ -39,7 +39,7 @@ public class AppConfig {
         return new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration cfg=new CorsConfiguration();
+                CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(Collections.singletonList("*"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowedHeaders(Collections.singletonList("*"));

@@ -27,11 +27,21 @@ public class JwtProvider {
     }
 
     public String getEmailFromToken(String jwt){
-        jwt = jwt.substring(7);
-        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-        String email = String.valueOf(claims.get("email"));
-        return email;
+        if(jwt == null || !jwt.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("JWT token is missing or invalid");
+        }
+
+        jwt = jwt.substring(7); // remove "Bearer "
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+
+        return String.valueOf(claims.get("email"));
     }
+
+
     private String popularAuthorities(Collection<? extends GrantedAuthority> authorities) {
         Set<String> auths = new HashSet<>();
         for(GrantedAuthority authority:authorities){

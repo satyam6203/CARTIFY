@@ -20,7 +20,7 @@ public class EmailService {
             String text
     ){
         try{
-            MimeMessage message=javaMailSender.createMimeMessage();
+            MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(message,"utf-8");
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(text);
@@ -28,7 +28,7 @@ public class EmailService {
             javaMailSender.send(message);
         }
         catch (Exception e){
-            throw new MailSendException("faild to send email");
+            throw new MailSendException("failed to send email");
         }
     }
 }

@@ -42,4 +42,6 @@ public class Seller {
     private boolean isEmailVerified=false;
 
     private AccountStatus accountStatus=AccountStatus.PENDING_VERIFICATION;
+
+    private Address pickupAddress;
 }

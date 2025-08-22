@@ -6,10 +6,8 @@ import com.satyam.Ecommerce.Repo.SellerRepo;
 import com.satyam.Ecommerce.Repo.UserRepo;
 import com.satyam.Ecommerce.constants.USER_ROLE;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,17 +20,15 @@ import java.util.List;
 @Service
 public class CustomUserServiceImpl implements UserDetailsService {
 
-    @Autowired
-    UserRepo userRepo;
-    @Autowired
-    SellerRepo sellerRepo;
-    private static final String SELLER_PREFIX="seller_";
+    private final UserRepo userRepo;
+    private final SellerRepo sellerRepo;
+    private static final String SELLER_PREFIX = "seller_";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if(username.startsWith(SELLER_PREFIX)){
-            String ActualUserName=username.substring(SELLER_PREFIX.length());
-            Seller seller=sellerRepo.findByEmail(ActualUserName);
+            String ActualUserName = username.substring(SELLER_PREFIX.length());
+            Seller seller = sellerRepo.findByEmail(ActualUserName);
             if(seller != null){
                 return buildUserDetails(
                         seller.getEmail(),
@@ -41,7 +37,7 @@ public class CustomUserServiceImpl implements UserDetailsService {
                 );
             }
         }else{
-            User user =userRepo.findByEmail(username);
+            User user = userRepo.findByEmail(username);
             if(user != null){
                 return buildUserDetails(user.getEmail(),user.getPassword(),user.getRole());
             }
@@ -50,11 +46,11 @@ public class CustomUserServiceImpl implements UserDetailsService {
     }
 
     private UserDetails buildUserDetails(String email, String password, USER_ROLE role) {
-        if(role==null){
-            role=USER_ROLE.ROLE_CUSTOMER;
+        if(role == null){
+            role = USER_ROLE.ROLE_CUSTOMER;
         }
-        List<GrantedAuthority> authorities=new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE"+role));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.toString()));
         return new org.springframework.security.core.userdetails.User(
                 email,
                 password,
