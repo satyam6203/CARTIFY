@@ -34,23 +34,25 @@ public class SellerServiceImpl implements SellerService {
     public Seller createSeller(Seller seller) throws Exception {
 
         Seller sellerExist = sellerRepo.findByEmail(seller.getEmail());
-
-        if(sellerExist != null){
-            throw  new Exception("Seller Already exist by this email use another account..");
+        if (sellerExist != null) {
+            throw new Exception("Seller already exists with this email, use another account.");
         }
 
-        Address saveAddress = addressRepo.save(seller.getPickupAddress());
+        Address savedAddress = addressRepo.save(seller.getPickupAddress());
 
         Seller newSeller = new Seller();
+
         newSeller.setEmail(seller.getEmail());
         newSeller.setPassword(passwordEncoder.encode(seller.getPassword()));
         newSeller.setSellerName(seller.getSellerName());
-        newSeller.setPickupAddress(seller.getPickupAddress());
+        newSeller.setPickupAddress(savedAddress);
         newSeller.setGSTIN(seller.getGSTIN());
         newSeller.setRole(USER_ROLE.ROLE_SELLER);
         newSeller.setMobile(seller.getMobile());
         newSeller.setBankDetails(seller.getBankDetails());
         newSeller.setBusinessDetails(seller.getBusinessDetails());
+        newSeller.setAccountStatus(AccountStatus.PENDING_VERIFICATION);
+        newSeller.setEmailVerified(false);
 
         return sellerRepo.save(newSeller);
     }
@@ -58,88 +60,78 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public Seller getSellerByID(Long id) throws Exception {
         return sellerRepo.findById(id)
-                .orElseThrow(()->new Exception("Seller not by this ID ->"+id));
+                .orElseThrow(() -> new Exception("Seller not by this ID ->" + id));
     }
 
     @Override
     public Seller getSellerByEmail(String email) throws Exception {
-        Seller seller=sellerRepo.findByEmail(email);
-        if(seller ==  null){
-            throw  new Exception("Seller not found by this email ->"+email);
+        Seller seller = sellerRepo.findByEmail(email);
+        if (seller == null) {
+            throw new Exception("Seller not found by this email ->" + email);
         }
         return seller;
     }
 
     @Override
-    public List<Seller> getSellers(AccountStatus status) {
+    public List<Seller> getAllSellers(AccountStatus status) {
         return sellerRepo.findByAccountStatus(status);
     }
 
     @Override
     public Seller updateSeller(Long id, Seller seller) throws Exception {
 
-        Seller existSeller = getSellerByID(id);
+        Seller existSeller = this.getSellerByID(id);
 
-        if(seller.getSellerName() != null){
+        if (seller.getSellerName() != null) {
             existSeller.setSellerName(seller.getSellerName());
         }
 
-        if(seller.getMobile() != null){
+        if (seller.getMobile() != null) {
             existSeller.setMobile(seller.getMobile());
         }
 
-        if(seller.getEmail() != null){
+        if (seller.getEmail() != null) {
             existSeller.setEmail(seller.getMobile());
         }
 
-        if(seller.getBusinessDetails() != null){
-            existSeller.setBusinessDetails(seller.getBusinessDetails());
+        if (seller.getBusinessDetails() != null &&
+                seller.getBusinessDetails().getBusinessName() != null) {
+
+            existSeller.getBusinessDetails().setBusinessName(
+                    seller.getBusinessDetails().getBusinessName());
         }
 
-        if(seller.getAddress() != null){
-            existSeller.setAddress(seller.getAddress());
-        }
-
-        if(seller.getBankDetails() != null
+        if (seller.getBankDetails() != null
                 && seller.getBankDetails().getAccountHolder() != null
                 && seller.getBankDetails().getAccountNumber() != null
-                && seller.getBankDetails().getIfscCode() != null
-        ){
+                && seller.getBankDetails().getIfscCode() != null) {
             existSeller.getBankDetails().setAccountHolder(
-                    seller.getBankDetails().getAccountHolder()
-            );
+                    seller.getBankDetails().getAccountHolder());
 
             existSeller.getBankDetails().setIfscCode(
-                    seller.getBankDetails().getIfscCode()
-            );
+                    seller.getBankDetails().getIfscCode());
 
             existSeller.getBankDetails().setAccountNumber(
-                    seller.getBankDetails().getAccountNumber()
-            );
+                    seller.getBankDetails().getAccountNumber());
         }
 
-        if(seller.getPickupAddress() != null
+        if (seller.getPickupAddress() != null
                 && seller.getPickupAddress().getAddress() != null
                 && seller.getPickupAddress().getCity() != null
                 && seller.getPickupAddress().getState() != null
-                && seller.getPickupAddress().getPhoneNumber() != null
-        ){
+                && seller.getPickupAddress().getPhoneNumber() != null) {
             existSeller.getPickupAddress().setAddress(
-                    seller.getPickupAddress().getAddress()
-            );
+                    seller.getPickupAddress().getAddress());
             existSeller.getPickupAddress().setPhoneNumber(
-                    seller.getPickupAddress().getPhoneNumber()
-            );
+                    seller.getPickupAddress().getPhoneNumber());
             existSeller.getPickupAddress().setCity(
-                    seller.getPickupAddress().getCity()
-            );
+                    seller.getPickupAddress().getCity());
             existSeller.getPickupAddress().setState(
-                    seller.getPickupAddress().getState()
-            );
+                    seller.getPickupAddress().getState());
 
         }
 
-        if(seller.getGSTIN() != null){
+        if (seller.getGSTIN() != null) {
             existSeller.setGSTIN(seller.getGSTIN());
         }
         return sellerRepo.save(existSeller);
@@ -147,9 +139,9 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public void deleteSeller(Long id) throws Exception {
-        Seller existById=getSellerByID(id);
+        Seller existById = getSellerByID(id);
 
-        if(existById == null){
+        if (existById == null) {
             throw new Exception("User not exist By this id ");
         }
         sellerRepo.deleteById(id);
@@ -157,14 +149,14 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public Seller verifyEmail(String email, String otp) throws Exception {
-        Seller seller=getSellerByEmail(email);
+        Seller seller = getSellerByEmail(email);
         seller.setEmailVerified(true);
         return sellerRepo.save(seller);
     }
 
     @Override
     public Seller updateSellerAccountStatus(Long sellerID, AccountStatus status) throws Exception {
-        Seller seller=getSellerByID(sellerID);
+        Seller seller = getSellerByID(sellerID);
         seller.setAccountStatus(status);
         return sellerRepo.save(seller);
     }

@@ -34,7 +34,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             return;
         }
 
-        jwt = jwt.substring(7); 
+        jwt = jwt.substring(7);
 
         try {
             SecretKey key = Keys.hmacShaKeyFor(Jwt_Constant.SECRET_KEY.getBytes());
@@ -58,9 +58,8 @@ public class JwtTokenValidator extends OncePerRequestFilter {
 
         } catch (io.jsonwebtoken.ExpiredJwtException ex) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("JWT token has expired");
-            return;
 
+            return;
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid or malformed JWT token");
@@ -68,5 +67,6 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+
     }
 }

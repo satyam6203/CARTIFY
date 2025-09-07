@@ -7,6 +7,9 @@ import com.satyam.Ecommerce.Response.ApiResponse;
 import com.satyam.Ecommerce.Response.AuthResponse;
 import com.satyam.Ecommerce.Service.AuthService;
 import com.satyam.Ecommerce.constants.USER_ROLE;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,10 +49,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> LoginHandler(@RequestBody LoginRequest req) throws Exception {
+    public ResponseEntity<AuthResponse> LoginHandler(
+            @RequestBody LoginRequest req,
+            HttpServletRequest request) throws Exception {
+
         AuthResponse authResponse = authService.signing(req);
-        AuthResponse res = new AuthResponse();
-        res.setMessage("Login Successfully..");
-        return ResponseEntity.ok(res);
+        authResponse.setMessage("Login Successfully..");
+
+        return ResponseEntity.ok(authResponse);
     }
 }

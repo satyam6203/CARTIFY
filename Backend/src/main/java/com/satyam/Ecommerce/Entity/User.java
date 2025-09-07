@@ -18,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class User {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,7 +29,9 @@ public class User {
     private String email;
 
     private String fullName;
+
     private String  mobile;
+
     private USER_ROLE role=USER_ROLE.ROLE_CUSTOMER;
 
     @OneToMany
