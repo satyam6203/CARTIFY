@@ -36,7 +36,8 @@ public class CustomUserServiceImpl implements UserDetailsService {
                         seller.getRole()
                 );
             }
-        }else{
+        }
+        else{
             User user = userRepo.findByEmail(username);
             if(user != null){
                 return buildUserDetails(user.getEmail(),user.getPassword(),user.getRole());

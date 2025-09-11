@@ -1,6 +1,5 @@
 package com.satyam.Ecommerce.Controller;
 
-import com.satyam.Ecommerce.Domain.VerificationCode;
 import com.satyam.Ecommerce.Request.LoginOtpRequest;
 import com.satyam.Ecommerce.Request.LoginRequest;
 import com.satyam.Ecommerce.Response.ApiResponse;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.satyam.Ecommerce.Entity.User;
 import com.satyam.Ecommerce.Repo.UserRepo;
 import com.satyam.Ecommerce.Response.SignUpRequest;
 

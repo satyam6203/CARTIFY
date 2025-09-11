@@ -3,6 +3,7 @@ package com.satyam.Ecommerce.Service.impl;
 import com.satyam.Ecommerce.Config.JwtProvider;
 import com.satyam.Ecommerce.Domain.Address;
 import com.satyam.Ecommerce.Domain.Seller;
+import com.satyam.Ecommerce.Exceptions.SellerException;
 import com.satyam.Ecommerce.Repo.AddressRepo;
 import com.satyam.Ecommerce.Repo.SellerRepo;
 import com.satyam.Ecommerce.Service.SellerService;
@@ -58,9 +59,9 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public Seller getSellerByID(Long id) throws Exception {
+    public Seller getSellerByID(Long id) throws SellerException {
         return sellerRepo.findById(id)
-                .orElseThrow(() -> new Exception("Seller not by this ID ->" + id));
+                .orElseThrow(() -> new SellerException("Seller not by this ID ->" + id));
     }
 
     @Override

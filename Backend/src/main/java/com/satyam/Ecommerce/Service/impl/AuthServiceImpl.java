@@ -1,11 +1,9 @@
 package com.satyam.Ecommerce.Service.impl;
 
 import com.satyam.Ecommerce.Config.JwtProvider;
-import com.satyam.Ecommerce.Domain.Cart;
 import com.satyam.Ecommerce.Domain.Seller;
 import com.satyam.Ecommerce.Domain.VerificationCode;
 import com.satyam.Ecommerce.Entity.User;
-import com.satyam.Ecommerce.Repo.CartRepo;
 import com.satyam.Ecommerce.Repo.SellerRepo;
 import com.satyam.Ecommerce.Repo.UserRepo;
 import com.satyam.Ecommerce.Repo.VerificationRepo;
@@ -17,7 +15,6 @@ import com.satyam.Ecommerce.Service.EmailService;
 import com.satyam.Ecommerce.constants.USER_ROLE;
 import com.satyam.Ecommerce.utils.OtpUtils;
 import lombok.RequiredArgsConstructor;
-// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +36,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepo userRepo;
     private final VerificationRepo verificationRepo;
     private final PasswordEncoder passwordEncoder;
-    private final CartRepo cartRepo;
     private final JwtProvider jwtProvider;
     private final EmailService emailService;
     private final CustomUserServiceImpl customUserService;
@@ -81,8 +77,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void sendLoginOtp(String email, USER_ROLE role) throws Exception {
+
         String SIGNING_PREFIX = "signing_";
-        // String SELLER_PREFIX = "seller_";
+
         if (email.startsWith(SIGNING_PREFIX)) {
 
             email = email.substring(SIGNING_PREFIX.length());
@@ -97,14 +94,14 @@ public class AuthServiceImpl implements AuthService {
                 if (user == null) {
                     throw new Exception("User Not exist with the provided email..");
                 }
-
             }
-
         }
         VerificationCode isExist = verificationRepo.findByEmail(email);
+
         if (isExist != null) {
             verificationRepo.delete(isExist);
         }
+
         String otp = OtpUtils.generateOtp();
         VerificationCode verificationCode = new VerificationCode();
         verificationCode.setOtp(otp);
@@ -143,7 +140,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse signing(LoginRequest request) {
+    public AuthResponse signing(LoginRequest request) throws Exception {
 
         String userName = request.getEmail();
         String otp = request.getOtp();
@@ -166,11 +163,17 @@ public class AuthServiceImpl implements AuthService {
         return authResponse;
     }
 
-    private Authentication authenticate(String userName, String otp) {
+    private Authentication authenticate(String userName, String otp) throws Exception {
 
         UserDetails userDetails = customUserService.loadUserByUsername(userName);
+
+        String SELLER_PREFIX = "seller_";
+        if(userName.startsWith(SELLER_PREFIX)){
+            userName=userName.substring(SELLER_PREFIX.length());
+        }
+
         if (userDetails == null) {
-            throw new BadCredentialsException("Invalid UserName or Password");
+            throw new Exception("Invalid UserName or Password");
         }
 
         VerificationCode verificationCode = verificationRepo.findByEmail(userName);

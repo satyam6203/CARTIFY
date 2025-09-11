@@ -2,6 +2,7 @@ package com.satyam.Ecommerce.Controller;
 
 import com.satyam.Ecommerce.Domain.Seller;
 import com.satyam.Ecommerce.Domain.VerificationCode;
+import com.satyam.Ecommerce.Exceptions.SellerException;
 import com.satyam.Ecommerce.Repo.VerificationRepo;
 import com.satyam.Ecommerce.Request.LoginRequest;
 import com.satyam.Ecommerce.Response.AuthResponse;
@@ -47,6 +48,7 @@ public class SellerController {
         if (verificationCode == null || !verificationCode.getOtp().equals(otp)) {
             throw new Exception("Wrong otp..");
         }
+
         Seller seller = sellerService.verifyEmail(verificationCode.getEmail(), otp);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
@@ -62,29 +64,60 @@ public class SellerController {
         verificationCode.setEmail(savedSeller.getEmail());
         verificationRepo.save(verificationCode);
 
-        // Prepare email content
         String subject = "PU MART Email Verification Code";
-        String text = "Welcome to PU MART! Please verify your account using the following link:\n\n";
+
         String verificationLink = "https://localhost:3000/verify-seller/" + otp;
 
-        // Send email
+        String text = "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "    <meta charset='UTF-8'>" +
+                "    <meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
+                "    <title>PU MART Email Verification</title>" +
+                "</head>" +
+                "<body style='font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;'>" +
+                "    <div style='max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);'>"
+                +
+                "        <h2 style='color: #333333; text-align: center;'>Welcome to PU MART!</h2>" +
+                "        <p style='font-size: 16px; color: #555555; text-align: center;'>Please verify your account by clicking the button below:</p>"
+                +
+                "        <div style='text-align: center; margin: 25px 0;'>" +
+                "            <a href='" + verificationLink + "' " +
+                "               style='display: inline-block; padding: 12px 25px; font-size: 18px; font-weight: bold; color: #ffffff; background-color: #4CAF50; text-decoration: none; border-radius: 8px;'>"
+                +
+                "               Verify My Account" +
+                "            </a>" +
+                "        </div>" +
+                "        <p style='font-size: 14px; color: #777777; text-align: center;'>Or you can copy and paste the following link into your browser:</p>"
+                +
+                "        <p style='font-size: 14px; color: #2563EB; text-align: center; word-break: break-all;'>"
+                + verificationLink + "</p>" +
+                "        <p style='font-size: 14px; color: #777777; text-align: center;'>This link will expire in <b>10 minutes</b>. Please do not share it with anyone.</p>"
+                +
+                "        <hr style='margin: 20px 0;'>" +
+                "        <p style='font-size: 12px; color: #aaaaaa; text-align: center;'>© 2025 PU MART. All rights reserved.</p>"
+                +
+                "    </div>" +
+                "</body>" +
+                "</html>";
+
         emailService.sendVerificationOtpEmail(
                 savedSeller.getEmail(),
                 verificationCode.getOtp(),
                 subject,
                 text + verificationLink);
-                
+
         return new ResponseEntity<>(savedSeller, HttpStatus.CREATED);
     }
 
-    @PostMapping("/profile")
+    @GetMapping("/profile")
     public ResponseEntity<Seller> getSellerByJwt(@RequestHeader("Authorization") String jwt) throws Exception {
         Seller seller = sellerService.getSellerProfile(jwt);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Seller> getSellerById(@PathVariable Long id) throws Exception {
+    @GetMapping("/{id}")
+    public ResponseEntity<Seller> getSellerById(@PathVariable Long id) throws SellerException {
         Seller seller = sellerService.getSellerByID(id);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
@@ -95,7 +128,7 @@ public class SellerController {
         return ResponseEntity.ok(sellers);
     }
 
-    @PatchMapping("/update/seller")
+    @PatchMapping("/update-seller")
     public ResponseEntity<Seller> updateSeller(
             @RequestHeader("Authorization") String jwt,
             @RequestBody Seller seller) throws Exception {
