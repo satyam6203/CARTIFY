@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,13 +20,16 @@ public class Cart {
     @OneToOne
     private User user;
 
+    private double totalSellingPrice;
+
     private int totalItem;
+
+    private int totalMrpPrice;
 
     private int discount;
 
     private String couponCode;
 
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<CartItem> items=new HashSet<>();
-
+    private Set<CartItem> cartItems=new HashSet<>();
 }

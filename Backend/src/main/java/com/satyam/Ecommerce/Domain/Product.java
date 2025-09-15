@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "Products")
 public class Product {
 
     @Id
@@ -44,15 +45,10 @@ public class Product {
     @ManyToOne
     private Seller seller;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     private String Sizes;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Review> reviews=new ArrayList<>();
-
-    public void setCreatedAt(LocalDateTime now) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setCreatedAt'");
-    }
 }

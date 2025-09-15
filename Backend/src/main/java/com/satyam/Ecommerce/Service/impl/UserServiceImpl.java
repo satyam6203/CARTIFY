@@ -4,11 +4,12 @@ import com.satyam.Ecommerce.Config.JwtProvider;
 import com.satyam.Ecommerce.Entity.User;
 import com.satyam.Ecommerce.Repo.UserRepo;
 import com.satyam.Ecommerce.Service.UserService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;

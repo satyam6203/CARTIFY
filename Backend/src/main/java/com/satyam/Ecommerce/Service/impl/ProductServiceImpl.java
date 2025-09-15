@@ -24,9 +24,10 @@ import com.satyam.Ecommerce.Request.CreateProductRequest;
 import com.satyam.Ecommerce.Service.ProductSerice;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductSerice {
 
     private final ProductRepo productRepo;
