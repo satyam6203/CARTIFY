@@ -1,5 +1,7 @@
 package com.satyam.Ecommerce.Domain;
 
+import com.satyam.Ecommerce.constants.PaymentStatus;
+
 import jakarta.persistence.Embeddable;
 import lombok.Data;
 
@@ -11,5 +13,5 @@ public class PaymentDetails {
     private String  razorPayPaymentLinkReferenceId;
     private String razorPayPaymentLinkStatus;
     private String razorPayPaymentIdZWSP;
-    private String status;
+    private PaymentStatus status;
 }

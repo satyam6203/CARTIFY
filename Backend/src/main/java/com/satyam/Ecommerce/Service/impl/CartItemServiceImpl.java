@@ -11,20 +11,21 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CartItemServiceImpl implements CartItemService{
+public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepo cartItemRepo;
 
     @Override
     public CartItem updateCartItem(Long userId, Long id, CartItem cartItem) throws Exception {
-        CartItem item=finCartItemById(id);
+        CartItem item = finCartItemById(id);
 
-        User user=item.getCart().getUser();
+        User user = item.getCart().getUser();
 
-        if(user.getId().equals(userId)){
+        if (user.getId().equals(userId)) {
             item.setQuantity(cartItem.getQuantity());
-            item.setMrpPrice(cartItem.getMrpPrice()*item.getProduct().getMrpPrice());
+            item.setMrpPrice(item.getQuantity() * item.getProduct().getMrpPrice());
             item.setSellingPrice(item.getQuantity() * item.getProduct().getSellingPrice());
+
             return cartItemRepo.save(item);
         }
         throw new Exception("You can't Update this cartItem");
@@ -32,20 +33,19 @@ public class CartItemServiceImpl implements CartItemService{
 
     @Override
     public void removeCartItem(Long userId, Long cartItemId) throws Exception {
-        CartItem item=finCartItemById(cartItemId);
+        CartItem item = finCartItemById(cartItemId);
 
-        User user=item.getCart().getUser();
+        User user = item.getCart().getUser();
 
-        if(user.getId().equals(userId)){
+        if (user.getId().equals(userId)) {
             cartItemRepo.delete(item);
-        }
-        else throw new Exception("You can't delete this items");
+        } else
+            throw new Exception("You can't delete this items");
     }
 
     @Override
     public CartItem finCartItemById(Long id) throws Exception {
-        return cartItemRepo.findById(id).orElseThrow(()->
-            new Exception("Item not found by this id "+id));
+        return cartItemRepo.findById(id).orElseThrow(() -> new Exception("Item not found by this id " + id));
     }
-    
+
 }

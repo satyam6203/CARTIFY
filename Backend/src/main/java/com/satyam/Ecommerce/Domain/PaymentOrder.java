@@ -11,6 +11,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -26,7 +27,7 @@ public class PaymentOrder {
 
     private PaymentMethod paymentMethod;
 
-    private String PaymentLink;
+    private String paymentLink;
 
     @ManyToOne
     private User user;

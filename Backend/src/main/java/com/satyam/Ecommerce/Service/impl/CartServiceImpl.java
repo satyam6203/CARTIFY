@@ -26,23 +26,33 @@ public class CartServiceImpl implements CartService {
         CartItem isPresent = cartItemRepo.findByCartAndProductAndSize(cart, product, size);
         if (isPresent == null) {
             CartItem cartItem = new CartItem();
-            cartItem.setProduct(product); 
+            cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
             cartItem.setSize(size);
             cartItem.setUserId(user.getId());
             cartItem.setMrpPrice(quantity * product.getMrpPrice());
             cartItem.setSellingPrice(quantity * product.getSellingPrice());
-            cartItem.setCart(cart);
-
+            
             cart.getCartItems().add(cartItem);
+            cartItem.setCart(cart);
             return cartItemRepo.save(cartItem);
         }
         return isPresent;
+
     }
 
     @Override
     public Cart findUserCart(User user) {
         Cart cart = cartRepo.findByUserId(user.getId());
+         if (cart == null) {
+            cart = new Cart();
+            cart.setUser(user);
+            cart.setTotalItem(0);
+            cart.setTotalMrpPrice(0);
+            cart.setTotalSellingPrice(0);
+            cart.setDiscount(0);
+            return cartRepo.save(cart);
+        }
 
         int totalPrice = 0;
         int totalDiscountedPrice = 0;
@@ -69,6 +79,6 @@ public class CartServiceImpl implements CartService {
         }
         double discount = mrpPrice - sellingPrice;
         double discountPercent = (discount / mrpPrice) * 100;
-        return (int) discountPercent;
+        return (int)discountPercent;
     }
 }

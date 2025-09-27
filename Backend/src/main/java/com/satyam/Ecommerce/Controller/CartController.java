@@ -15,6 +15,7 @@ import com.satyam.Ecommerce.Domain.Cart;
 import com.satyam.Ecommerce.Domain.CartItem;
 import com.satyam.Ecommerce.Domain.Product;
 import com.satyam.Ecommerce.Entity.User;
+import com.satyam.Ecommerce.Exceptions.ProductException;
 import com.satyam.Ecommerce.Request.AddItemRequest;
 import com.satyam.Ecommerce.Response.ApiResponse;
 import com.satyam.Ecommerce.Service.CartItemService;
@@ -47,20 +48,24 @@ public class CartController {
     @PutMapping("/add")
     public ResponseEntity<CartItem> addItemToCart(
             @RequestBody AddItemRequest req,
-            @RequestHeader("Authorization") String jwt) throws Exception {
+            @RequestHeader("Authorization") String jwt) throws Exception, ProductException {
 
-        User user = userService.findUserByJwtToken(jwt);
-        Product product = productSerice.findProductById(req.getProductId());
-
-        CartItem item = cartService.addCartItem(
-                user,
-                product,
-                req.getSize(),
+        try {
+            User user = userService.findUserByJwtToken(jwt);
+            Product product = productSerice.findProductById(req.getProductId());
+            CartItem item = cartService.addCartItem(
+                user, 
+                product, 
+                req.getSize(), 
                 req.getQuantity());
 
-        ApiResponse res = new ApiResponse();
-        res.setMessage("Item added to Cart SuccessFully.");
-        return new ResponseEntity<>(item, HttpStatus.OK);
+            ApiResponse apiResponse=new ApiResponse();
+            apiResponse.setMessage("Data inserted SuccessFully.");
+
+            return new ResponseEntity<>(item, HttpStatus.OK);
+        } catch (ProductException ex) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/item/{cartItemId}")
@@ -78,17 +83,17 @@ public class CartController {
 
     @PutMapping("/item/{cartItemId}")
     public ResponseEntity<CartItem> updateCartItemHandler(
-            @PathVariable Long id,
+            @PathVariable Long cartItemId,
             @RequestHeader("Authorization") String jwt,
             @RequestBody CartItem cartItem) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
-        CartItem updateCartItem=null;
-        if(cartItem.getQuantity()>0){
+        CartItem updateCartItem = null;
+        if(cartItem.getQuantity() > 0) {
             updateCartItem = cartItemService.updateCartItem(
-                user.getId(), 
-                cartItem.getId(), 
-                cartItem);
+                    user.getId(),
+                    cartItemId,
+                    cartItem);
         }
-        return new ResponseEntity<>(updateCartItem,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(updateCartItem, HttpStatus.ACCEPTED);
     }
 }
