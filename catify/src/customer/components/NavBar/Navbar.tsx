@@ -8,8 +8,8 @@ import CategorySheet from './CategorySheet';
 import { mainCategory } from '../../../data/category/mainCategory';
 
 const Navbar = () => {
-    const theme=useTheme()
-    const isLarge=useMediaQuery(theme.breakpoints.up("lg"))
+    const theme=useTheme();
+    const isLarge=useMediaQuery(theme.breakpoints.up("lg"));
     const [selectedCategory,setSelectedCategory]=useState("men");
     const [showCategorySheet,setShowCategorySheet]=useState(false);
 
