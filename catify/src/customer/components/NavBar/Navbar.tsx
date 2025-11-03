@@ -6,12 +6,14 @@ import React, { useState } from 'react'
 import { AddShoppingCart, FavoriteBorder, Storefront } from '@mui/icons-material';
 import CategorySheet from './CategorySheet';
 import { mainCategory } from '../../../data/category/mainCategory';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const theme=useTheme();
     const isLarge=useMediaQuery(theme.breakpoints.up("lg"));
     const [selectedCategory,setSelectedCategory]=useState("men");
     const [showCategorySheet,setShowCategorySheet]=useState(false);
+    const navigate=useNavigate();
 
   return (
     <div>
@@ -22,7 +24,7 @@ const Navbar = () => {
                        {!isLarge && <IconButton>
                             <MenuIcon/>
                         </IconButton>}
-                        <h1 className='logo cursor-pointer text-lg md:text-2xl text-primary-color'>
+                        <h1 onClick={()=>navigate("/")} className='logo cursor-pointer text-lg md:text-2xl text-primary-color'>
                             CartiFy
                         </h1>
                     </div>
@@ -50,7 +52,7 @@ const Navbar = () => {
                         <SearchIcon/>
                     </IconButton>
                     {
-                        false?<Button className='flex items-center gap-2'>
+                        true?<Button onClick={()=>navigate("/account/orders")} className='flex items-center gap-2'>
                             <Avatar
                                 sx={{width:29,height:29}}
                                 src='https://cdn.pixabay.com/photo/2015/04/15/09/28/head-723540_640.jpg' 
@@ -63,10 +65,10 @@ const Navbar = () => {
                     <IconButton>
                         <FavoriteBorder sx={{fontSize:29}}/>
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={()=>navigate("/cart")}>
                         <AddShoppingCart className='text-gray-700' sx={{fontSize:29}}/>
                     </IconButton>
-                   {isLarge && <Button startIcon={<Storefront/>} variant='outlined'>
+                   {isLarge && <Button onClick={()=>navigate("/Become-Seller")} startIcon={<Storefront/>} variant='outlined'>
                         Become Seller
                     </Button>}
                 </div>

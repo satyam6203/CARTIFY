@@ -3,6 +3,9 @@ import StarIcon from '@mui/icons-material/Star';
 import { teal } from '@mui/material/colors';
 import { Button, Divider } from '@mui/material';
 import { Add, AddShoppingCart, FavoriteBorder, LocalShipping, Remove, Shield, Wallet, WorkspacePremium } from '@mui/icons-material';
+import SimilarProduct from './SimilarProduct';
+import Review from '../Review/Review';
+import ReviewCard from '../Review/ReviewCard';
 const ProductDetails = () => {
   const [quantity,setQuantity]=React.useState(1);
   return (
@@ -98,10 +101,21 @@ const ProductDetails = () => {
                     Wishlist 
                   </Button>
               </div>
+              <Divider className='pt-5'/>
               <div className='mt-5'>
                 <p>This Banarashi saree is a perfect blend of tradition and elegance. Its intricate designs and rich fabric make it stand out in any celebration. Ideal for weddings, festivals, or special occasions.</p>
               </div>
+              <div className='mt-12  space-y-12'>
+                <ReviewCard/>
+
+              </div>
         </section>
+      </div>
+      <div className='mt-20'>
+        <h1 className='text-lg font-bold'>Similar Product</h1>
+        <div className='pt-5'>
+          <SimilarProduct/>
+        </div>
       </div>
     </div>
   )
