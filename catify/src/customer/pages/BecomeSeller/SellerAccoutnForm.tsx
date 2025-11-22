@@ -4,6 +4,8 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import BecomeSellerStep1 from "./BecomeSellerStep1";
 import BecomeSellerStep2 from "./BecomeSellerStep2";
+import BecomeSellerStep3 from "./BecomeSellerStep3";
+import BecomeSellerStep4 from "./BecomeSellerStep4";
 
 const steps = [
   "Tax Details & Mobile",
@@ -12,7 +14,7 @@ const steps = [
   "Supplier Details",
 ];
 const SellerAccoutnForm = () => {
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
   const handleStep = (value: number) => () => {
     (activeStep < steps.length - 1 || (activeStep > 0 && value == -1)) &&
       setActiveStep(activeStep + value);
@@ -68,7 +70,9 @@ const SellerAccoutnForm = () => {
       <section className="mt-15 space-y-10">
         <div>
           {activeStep == 0 ? <BecomeSellerStep1 formik={formik} /> :
-          activeStep==1?<BecomeSellerStep2 formik={formik}/>: ""
+          activeStep==1?<BecomeSellerStep2 formik={formik}/>:
+          activeStep==2?<BecomeSellerStep3 formik={formik}/> :
+          <BecomeSellerStep4 formik={formik}/>
 
           }
         </div>

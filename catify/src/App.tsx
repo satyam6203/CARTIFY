@@ -15,6 +15,7 @@ import Account from './customer/pages/Account/Account';
 import { Route, Routes } from 'react-router-dom';
 import BecomeSeller from './customer/pages/BecomeSeller/BecomeSeller';
 import OrderDetails from './customer/pages/Account/OrderDetails';
+import SellerDashboard from './seller/pages/SellerDashBoard/SellerDashboard';
 
 
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/Pay" element={<CheckOutForm/>}/>
           <Route path="/Become-Seller" element={<BecomeSeller/>}/>
           <Route path="/account/*" element={<Account/>}/>
+          <Route path="/seller/*" element={<SellerDashboard/>}/>
         </Routes>
       </div>
     </ThemeProvider>
