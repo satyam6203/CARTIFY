@@ -20,10 +20,10 @@ const steps = [
 
 
 const SellerAccountForm = () => {
-    const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
   const {sellerAuth}=useAppSelector(store=>store)
-
+  
   const handleStep = (value: number) => {
     setActiveStep(activeStep + value);
   };

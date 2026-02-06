@@ -8,14 +8,9 @@ import OTPInput from "../../components/OtpFild/OTPInput";
 
 
 const BecomeSellerFormStep1 = ({ formik, handleOtpChange }: any) => {
-
-
-
     const handleResendOTP = () => {
         console.log("handle resend otp")
     }
-
-
 
     return (
         <Box  >
@@ -62,8 +57,6 @@ const BecomeSellerFormStep1 = ({ formik, handleOtpChange }: any) => {
                     helperText={formik.touched.GSTIN && formik.errors.GSTIN}
                 />
             </div>
-
-
         </Box>
     );
 };

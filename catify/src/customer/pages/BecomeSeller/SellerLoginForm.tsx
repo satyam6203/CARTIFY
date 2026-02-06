@@ -50,7 +50,7 @@ const SellerLoginForm = () => {
     }
 
     const handleLogin=()=>{
-        formik.handleSubmit()
+        formik.handleSubmit();
     }
 
     useEffect(() => {
