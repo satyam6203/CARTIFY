@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import store, { useAppDispatch, useAppSelector } from '../../../Redux Toolkit/Store';
+import { useAppDispatch, useAppSelector } from '../../../Redux Toolkit/Store';
 import { fetchRevenueChart } from '../../../Redux Toolkit/Seller/revenueChartSlice';
 
 
@@ -13,7 +13,7 @@ const SellingChart = ({chartType}:{chartType:string}) => {
       dispatch(fetchRevenueChart({type:chartType}))
     }
     
-  },[chartType])
+  },[chartType, dispatch])
     // console.log("daily revenue chart ****** ",revenueChart.dailyRevenue)
     return (
       <ResponsiveContainer width="100%" height="100%">
