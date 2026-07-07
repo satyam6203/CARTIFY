@@ -20,13 +20,13 @@ const AdminDashboard = () => {
   }, [deal.dealCreated, deal.dealUpdated, deal.error,admin.categoryUpdated])
   return (
     <>
-      <div className="min-h-screen">
+      <div className="h-screen flex flex-col">
         <Navbar DrawerList={AdminDrawerList} />
-        <section className="lg:flex lg:h-[90vh]">
+        <section className="flex flex-1 overflow-hidden">
           <div className="hidden lg:block h-full">
             <AdminDrawerList />
           </div>
-          <div className="p-10 w-full lg:w-[80%]  overflow-y-auto">
+          <div className="p-10 w-full lg:w-[80%] overflow-y-auto">
             <AdminRoutes />
           </div>
         </section>
