@@ -37,10 +37,11 @@ public class AuthController {
     public ResponseEntity<ApiResponse> sentLoginOtp(
             @RequestBody VerificationCode req) throws MessagingException, UserException {
 
-        authService.sentLoginOtp(req.getEmail());
+        String otp = authService.sentLoginOtp(req.getEmail());
 
         ApiResponse res = new ApiResponse();
         res.setMessage("otp sent");
+        res.setOtp(otp);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 

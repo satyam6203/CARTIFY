@@ -20,7 +20,8 @@ const initialState: AuthState = {
     role: null,
     loading: false,
     error: null,
-    otpSent:false
+    otpSent:false,
+    otpValue: null
 };
 
 // Define the base URL for the API
@@ -112,9 +113,12 @@ const authSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(sendLoginSignupOtp.fulfilled, (state) => {
+            .addCase(sendLoginSignupOtp.fulfilled, (state, action) => {
                 state.loading = false;
                 state.otpSent = true;
+                if (action.payload.otp) {
+                    state.otpValue = action.payload.otp;
+                }
             })
             .addCase(sendLoginSignupOtp.rejected, (state, action) => {
                 state.loading = false;

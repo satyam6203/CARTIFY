@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public void sentLoginOtp(String email) throws UserException, MessagingException {
+    public String sentLoginOtp(String email) throws UserException, MessagingException {
 
 
         String SIGNING_PREFIX = "signing_";
@@ -97,7 +97,13 @@ public class AuthServiceImpl implements AuthService {
                 "</body>" +
                 "</html>";
 
-        emailService.sendVerificationOtpEmail(email, otp, subject, text);
+        try {
+            emailService.sendVerificationOtpEmail(email, otp, subject, text);
+        } catch (Exception e) {
+            System.out.println("Email send failed: " + e.getMessage());
+        }
+
+        return otp;
     }
 
     @Override
@@ -123,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
             createdUser.setEmail(email);
             createdUser.setFullName(fullName);
             createdUser.setRole(USER_ROLE.ROLE_CUSTOMER);
-            createdUser.setMobile("9083476123");
+            createdUser.setMobile("0123456789");
             createdUser.setPassword(passwordEncoder.encode(otp));
 
             System.out.println(createdUser);

@@ -8,6 +8,7 @@ export interface AuthResponse {
 export interface ApiResponse {
     message: string;
     status: boolean;
+    otp?: string;
 }
 
 export interface LoginRequest {
@@ -33,5 +34,6 @@ export interface AuthState {
     role: string | null;
     loading: boolean;
     error: string | null;
-    otpSent:boolean
+    otpSent:boolean;
+    otpValue?: string | null;
 }

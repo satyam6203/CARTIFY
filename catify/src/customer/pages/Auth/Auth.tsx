@@ -47,7 +47,7 @@ const Auth = () => {
                     variant="filled"
                     sx={{ width: '100%' }}
                 >
-                    {auth.error?auth.error : " otp sent to your email!"}
+                    {auth.error?auth.error : auth.otpValue ? "OTP: "+auth.otpValue : " otp sent to your email!"}
                 </Alert>
             </Snackbar>
         </div>
